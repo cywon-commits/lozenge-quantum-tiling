@@ -1,0 +1,11 @@
+python qmc_pkl.py fa_24_18_0.09_16.pkl 24 24 0.15 1500 411 >> qb24.log 2>&1
+python qmc_pkl.py fa_24_12_0.09_13.pkl 24 24 0.15 1500 412 >> qb24.log 2>&1
+python qmc_pkl.py fa_24_6_0.09_12.pkl 24 24 0.15 1500 413 >> qb24.log 2>&1
+python qmc_pkl.py fa_24_12_0.13_30.pkl 24 24 0.15 1500 414 >> qb24.log 2>&1
+python qmc_pkl.py fa_24_dice_0.15_34.pkl 24 24 0.15 1500 415 >> qb24.log 2>&1
+python qmc_pkl.py fa_24_6_0.15_36.pkl 24 24 0.15 1500 416 >> qb24.log 2>&1
+python qmc_pkl.py fa_24_dice_0.17_41.pkl 24 24 0.15 1500 417 >> qb24.log 2>&1
+python qmc_pkl.py fa_24_dice_0.17_42.pkl 24 24 0.15 1500 418 >> qb24.log 2>&1
+python qmc_pkl.py fa_30_dice_0.15_85.pkl 30 30 0.15 1200 423 >> qb30.log 2>&1
+python qmc_pkl.py fa_30_6_0.17_91.pkl 30 30 0.15 1200 424 >> qb30.log 2>&1
+python tilt.py 30 '[]' 30 0.15 1200 499 >> qb30.log 2>&1

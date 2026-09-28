@@ -1,0 +1,10 @@
+cell 6x6 s=0: 263640 tilings (cap 800k), 131820 bipartite, distinct m 7
+cell 6x6 s=1: 268545 tilings (cap 800k), 62736 bipartite, distinct m 5
+cell 6x6 s=2: 266601 tilings (cap 800k), 66867 bipartite, distinct m 5
+cell 6x6 s=3: 281268 tilings (cap 800k), 140634 bipartite, distinct m 7
+cell 6x6 s=4: 266601 tilings (cap 800k), 66867 bipartite, distinct m 5
+cell 6x6 s=5: 268545 tilings (cap 800k), 62736 bipartite, distinct m 5
+cell 4x9 s=0: 326273 tilings (cap 800k), 23344 bipartite, distinct m 4
+cell 4x9 s=1: 326145 tilings (cap 800k), 39696 bipartite, distinct m 5
+cell 4x9 s=2: 326145 tilings (cap 800k), 39696 bipartite, distinct m 5
+cell 4x9 s=3: 326273 tilings (cap 800k), 23344 bipartite, distinct m 4

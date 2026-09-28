@@ -1,0 +1,10 @@
+python tilt.py 24 '[[0,0]]' 24 0.10 1500 51
+python tilt.py 24 '[[0,6]]' 24 0.10 1500 52
+python tilt.py 24 '[[0,12]]' 24 0.10 1500 53
+python tilt.py 24 '[[0,18]]' 24 0.10 1500 54
+python tilt.py 24 '[[0,0]]' 24 0.20 1500 55
+python tilt.py 24 '[[0,6]]' 24 0.20 1500 56
+python tilt.py 24 '[[0,12]]' 24 0.20 1500 57
+python tilt.py 24 '[[0,18]]' 24 0.20 1500 58
+python tilt.py 24 '[[0,24]]' 24 0.10 1500 59
+python tilt.py 24 '[[0,24]]' 24 0.0 1500 60

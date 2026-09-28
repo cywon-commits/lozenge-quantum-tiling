@@ -1,0 +1,5 @@
+6x6 s=0: tilings 263640 bipartite 131820 trunc False 346s
+6x6 s=1: tilings 268545 bipartite 62736 trunc False 399s
+6x6 s=2: tilings 266601 bipartite 66867 trunc False 314s
+6x6 s=3: tilings 281268 bipartite 140634 trunc False 254s
+6x6 s=4: tilings 266601 bipartite 66867 trunc False 262s

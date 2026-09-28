@@ -1,0 +1,16 @@
+python qmc_s.py square 12 0.5 24.0 0.1 6000 601 >> qs_S.log 2>&1
+python qmc_s.py M3 12 0.5 24.0 0.1 6000 602 >> qs_S.log 2>&1
+python qmc_s.py M2 12 0.5 24.0 0.1 6000 603 >> qs_S.log 2>&1
+python qmc_s.py dice 12 0.5 24.0 0.1 6000 604 >> qs_S.log 2>&1
+python qmc_s.py square 12 1.0 12.0 0.1 6000 605 >> qs_S.log 2>&1
+python qmc_s.py M3 12 1.0 12.0 0.1 6000 606 >> qs_S.log 2>&1
+python qmc_s.py M2 12 1.0 12.0 0.1 6000 607 >> qs_S.log 2>&1
+python qmc_s.py dice 12 1.0 12.0 0.1 6000 608 >> qs_S.log 2>&1
+python qmc_s.py square 12 1.5 8.0 0.1 6000 609 >> qs_S.log 2>&1
+python qmc_s.py M3 12 1.5 8.0 0.1 6000 610 >> qs_S.log 2>&1
+python qmc_s.py M2 12 1.5 8.0 0.1 6000 611 >> qs_S.log 2>&1
+python qmc_s.py dice 12 1.5 8.0 0.1 6000 612 >> qs_S.log 2>&1
+python qmc_s.py square 12 2.0 6.0 0.1 6000 613 >> qs_S.log 2>&1
+python qmc_s.py M3 12 2.0 6.0 0.1 6000 614 >> qs_S.log 2>&1
+python qmc_s.py M2 12 2.0 6.0 0.1 6000 615 >> qs_S.log 2>&1
+python qmc_s.py dice 12 2.0 6.0 0.1 6000 616 >> qs_S.log 2>&1

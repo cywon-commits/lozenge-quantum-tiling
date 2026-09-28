@@ -1,0 +1,12 @@
+12x3 s=0: tilings 539636 bipartite 269818 trunc False 56s
+12x3 s=1: tilings 298913 bipartite 55834 trunc False 37s
+12x3 s=2: tilings 305265 bipartite 29256 trunc False 89s
+12x3 s=3: tilings 281268 bipartite 140634 trunc False 122s
+12x3 s=4: tilings 269177 bipartite 42181 trunc False 111s
+12x3 s=5: tilings 269177 bipartite 42181 trunc False 118s
+12x3 s=6: tilings 281268 bipartite 140634 trunc False 122s
+12x3 s=7: tilings 305265 bipartite 29256 trunc False 103s
+12x3 s=8: tilings 298913 bipartite 55834 trunc False 88s
+12x3 s=9: tilings 539636 bipartite 269818 trunc False 116s
+12x3 s=10: tilings 971697 bipartite 11823 trunc False 59s
+12x3 s=11: tilings 971697 bipartite 11823 trunc False 54s

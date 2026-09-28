@@ -1,0 +1,9 @@
+9x4 s=0: tilings 326273 bipartite 23344 trunc False 43s
+9x4 s=1: tilings 285380 bipartite 142690 trunc False 67s
+9x4 s=2: tilings 269177 bipartite 42181 trunc False 139s
+9x4 s=3: tilings 269177 bipartite 42181 trunc False 141s
+9x4 s=4: tilings 285380 bipartite 142690 trunc False 152s
+9x4 s=5: tilings 326273 bipartite 23344 trunc False 118s
+9x4 s=6: tilings 298913 bipartite 55834 trunc False 97s
+9x4 s=7: tilings 547316 bipartite 273658 trunc False 131s
+9x4 s=8: tilings 298913 bipartite 55834 trunc False 69s

@@ -1,0 +1,6 @@
+python qmc_pkl.py ann_18_12_0.09_22_300.pkl 18 18 0.15 1500 301 >> qhull.log 2>&1
+python qmc_pkl.py ann_18_12_0.18_1_0.pkl 18 18 0.15 1500 302 >> qhull.log 2>&1
+python qmc_pkl.py ann_18_12_0.2_37_300.pkl 18 18 0.15 1500 303 >> qhull.log 2>&1
+python qmc_pkl.py ann_18_6_0.14_27_300.pkl 18 18 0.15 1500 304 >> qhull.log 2>&1
+python qmc_pkl.py ann_18_dice_0.18_32_300.pkl 18 18 0.15 1500 305 >> qhull.log 2>&1
+python qmc_pkl.py ann_18_dice_0.25_2_300.pkl 18 18 0.15 1500 306 >> qhull.log 2>&1

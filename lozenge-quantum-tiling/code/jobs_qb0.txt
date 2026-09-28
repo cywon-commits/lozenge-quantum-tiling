@@ -1,0 +1,6 @@
+python tilt.py 24 '[[0,24]]' 24 0.10 700 401 >> qb_sq.log 2>&1
+python qmc_pkl.py fa_30_18_0.11_78.pkl 30 30 0.15 1200 419 >> qb30.log 2>&1
+python qmc_pkl.py fa_30_6_0.11_76.pkl 30 30 0.15 1200 420 >> qb30.log 2>&1
+python qmc_pkl.py fa_30_dice_0.13_80.pkl 30 30 0.15 1200 421 >> qb30.log 2>&1
+python qmc_pkl.py fa_30_6_0.15_86.pkl 30 30 0.15 1200 422 >> qb30.log 2>&1
+python qmc_pkl.py fa_30_dice_0.17_90.pkl 30 30 0.15 1200 425 >> qb30.log 2>&1

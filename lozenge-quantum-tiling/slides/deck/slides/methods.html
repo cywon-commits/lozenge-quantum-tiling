@@ -1,0 +1,33 @@
+<section id="methods" data-section="방법과 메커니즘" style="background:#F1EEE6; color:#14213D; font-family:'Noto Sans KR', Arial, sans-serif; padding:112px 128px 160px; display:flex; flex-direction:column; gap:48px">
+<p style="font-size:28px; font-weight:500; color:#D55E00">방법</p>
+<h2 style="font-size:60px; font-weight:700; line-height:1.15">수십만 개 격자를 걸러 QMC로 확정한다</h2>
+<div style="display:flex; align-items:stretch; gap:20px">
+<div style="flex:1; background:#FBFAF6; border:2px solid #D8D2C4; border-radius:20px; padding:32px; display:flex; flex-direction:column; gap:16px">
+<x-icon name="Search" style="color:#0072B2; width:56px; height:56px"></x-icon>
+<h3 style="font-size:34px; font-weight:700">전수 열거</h3>
+<p style="font-size:26px; line-height:1.4; color:#3D4556">36사이트 셀까지 모든 주기 타일링, 셀당 최대 5×10⁵개</p>
+</div>
+<x-connector style="width:48px; color:#8A8577"></x-connector>
+<div style="flex:1; background:#FBFAF6; border:2px solid #D8D2C4; border-radius:20px; padding:32px; display:flex; flex-direction:column; gap:16px">
+<x-icon name="Lightbulb" style="color:#0072B2; width:56px; height:56px"></x-icon>
+<h3 style="font-size:34px; font-weight:700">배위수 모델</h3>
+<p style="font-size:26px; line-height:1.4; color:#3D4556">Σ ε(z) 로 순위 매김, 오차 1.4×10⁻⁴ J</p>
+</div>
+<x-connector style="width:48px; color:#8A8577"></x-connector>
+<div style="flex:1; background:#FBFAF6; border:2px solid #D8D2C4; border-radius:20px; padding:32px; display:flex; flex-direction:column; gap:16px">
+<x-icon name="Chart" style="color:#0072B2; width:56px; height:56px"></x-icon>
+<h3 style="font-size:34px; font-weight:700">스핀파 (LSWT)</h3>
+<p style="font-size:26px; line-height:1.4; color:#3D4556">임의 그래프, L = 36에서 후보 재정렬</p>
+</div>
+<x-connector style="width:48px; color:#8A8577"></x-connector>
+<div style="flex:1; background:#FBEBDD; border:2px solid #E7B892; border-radius:20px; padding:32px; display:flex; flex-direction:column; gap:16px">
+<x-icon name="Verified" style="color:#D55E00; width:56px; height:56px"></x-icon>
+<h3 style="font-size:34px; font-weight:700">양자 몬테카를로</h3>
+<p style="font-size:26px; line-height:1.4; color:#3D4556">부호 문제 없음, S = ½ – 3/2, 정확 대각화로 검증</p>
+</div>
+</div>
+<p style="font-size:30px; line-height:1.4; color:#3D4556">이분 격자라서 모든 타일링을 부호 문제 없이 정확한 QMC로 비교할 수 있다.</p>
+<p style="position:absolute; left:128px; bottom:64px; width:1200px; font-size:24px; color:#6B7280">로젠지 타일링의 양자 선택 · 원창연</p>
+<p style="position:absolute; right:128px; bottom:64px; width:200px; font-size:24px; color:#6B7280; text-align:right">4</p>
+<aside>후보가 너무 많아서 QMC만으로는 탐색할 수 없습니다. 그래서 36사이트 셀까지의 주기 타일링을 전부 열거하고, 다음 장에서 설명할 배위수 모델로 걸러낸 뒤, 스핀파로 다시 정렬하고, 최종 후보만 QMC로 확정했습니다. 모든 타일링이 이분 격자라 QMC에 부호 문제가 없다는 점이 핵심입니다.</aside>
+</section>
