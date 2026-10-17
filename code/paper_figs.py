@@ -17,7 +17,7 @@ plt.rcParams.update({
 C = dict(blue='#0072B2', red='#D55E00', green='#009E73', pink='#CC79A7', orange='#E69F00', sky='#56B4E9', gray='#7f7f7f')
 OUT = 'paper/figs/'
 W1, W2 = 3.4, 7.0
-ESQ, ED = -0.66917, -0.63786                      # QMC S=1/2 e0 (square, dice)
+ESQ, ED = -0.669437, -0.63786                     # e0 (square: thermodynamic limit, Sandvik 1997; dice: QMC L=24)
 lin = lambda m: ESQ + (ED - ESQ) * 6 * m
 A1 = np.array([1.0, 0]); A2 = np.array([0.5, np.sqrt(3) / 2])
 ZC = {3: '#c6dbef', 4: '#6baed6', 5: '#2171b5', 6: '#08306b'}   # one hue, light -> dark with z
@@ -85,15 +85,23 @@ def fig2():
     fig, axs = plt.subplots(2, 1, figsize=(W1, 4.9))
     ax = axs[0]
     zs = np.array([3, 4, 5, 6]); ev = np.array([EPS[k] for k in zs])
-    ax.plot(zs, ev, 'o', color=C['blue'], ms=7, zorder=3, label=r'LSWT fit $\varepsilon(z)$')
-    zz = np.linspace(3, 6, 50); p = np.polyfit(zs, ev, 2); ax.plot(zz, np.polyval(p, zz), '-', color=C['blue'], lw=1)
-    ax.plot([3, 6], [EPS[3], EPS[6]], '--', color=C['red'], lw=1.2, label='chord $z=3\\leftrightarrow6$ (dice)')
-    ax.plot([4], [(EPS[3] * 2 + EPS[6]) / 3], 's', mfc='white', mec=C['red'], ms=7, zorder=4)
-    ax.annotate('', xy=(4.0, EPS[4] + 0.004), xytext=(4.0, (2 * EPS[3] + EPS[6]) / 3 - 0.004),
-                arrowprops=dict(arrowstyle='->', color='k', lw=0.8))
-    ax.text(4.12, -0.655, r'$\Delta=0.020J$', fontsize=8.5, va='center')
-    ax.set_xlabel('site coordination $z$'); ax.set_ylabel(r'$\varepsilon(z)$  ($J$ per site)')
-    ax.set_xticks([3, 4, 5, 6]); ax.legend(loc='upper left'); tag(ax, '(a)', x=-0.2)
+    chord = lambda z: EPS[3] + (EPS[6] - EPS[3]) * (z - 3) / 3          # dice-type mixing line z=3 <-> 6
+    r = 1e3 * (ev - chord(zs))                                              # residual in 10^-3 J
+    zz = np.linspace(3, 6, 100); p = np.polyfit(zs, ev, 2)
+    ax.axhline(0, color=C['red'], ls='--', lw=1.2, label=r'chord $z=3\leftrightarrow6$ (dice mixing)')
+    ax.plot(zz, 1e3 * (np.polyval(p, zz) - chord(zz)), '-', color=C['blue'], lw=1)
+    ax.plot(zs, r, 'o', color=C['blue'], ms=7, zorder=3, label=r'LSWT fit $\varepsilon(z)$')
+    ax.plot([4], [0], 's', mfc='white', mec=C['red'], ms=7, zorder=4)
+    ax.annotate('', xy=(4.0, r[1] + 1.0), xytext=(4.0, -1.0), arrowprops=dict(arrowstyle='->', color='k', lw=0.9))
+    ax.text(4.1, 0.5 * r[1], r'$\Delta=0.020J$', fontsize=9, va='center')
+    d2 = [EPS[3] + EPS[5] - 2 * EPS[4], EPS[4] + EPS[6] - 2 * EPS[5]]
+    ax.text(4.5, 10.5, r'$\delta^2\varepsilon(4)=%.4f\,J$,  $\delta^2\varepsilon(5)=%.4f\,J$' % tuple(d2),
+            ha='center', va='center', fontsize=8.5)
+    ax.set_ylim(-27, 15); ax.set_xlim(2.8, 6.2)
+    ax.set_xlabel('site coordination $z$'); ax.set_ylabel(r'$\varepsilon(z)-$chord  ($10^{-3}J$)')
+    ax.text(5.0, 1.2, 'dice-mixing chord', color=C['red'], fontsize=8.5, ha='center', va='bottom')
+    ax.text(3.0, -23.5, r"$\varepsilon(z)$ (LSWT)", color=C["blue"], fontsize=9, ha="left", va="center")
+    ax.set_xticks([3, 4, 5, 6]); tag(ax, '(a)', x=-0.2)
     ax = axs[1]
     d = np.load('degfit_m.npz'); X, Y = d['X'], d['Y']
     pred = X @ np.array([EPS[k] for k in (3, 4, 5, 6)]) + 0.0304 * d['m']

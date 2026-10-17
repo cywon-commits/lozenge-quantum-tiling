@@ -3,13 +3,17 @@
 Code and data for the manuscript
 
 > **Quantum order by disorder among lozenge tilings: a staircase of hub-free crystals between the Lieb ferrimagnet and the antiferromagnet**
-> Changyeon Won, Department of Physics, Kyung Hee University
+> Suhwan Yoo, Jeehoon Choi, Chaeyeon Kim, Hee Young Kim, and Changyeon Won, Department of Physics, Kyung Hee University
 
 The manuscript (`manuscript/main.pdf`) studies the spin-S Heisenberg antiferromagnet on the bipartite networks defined by lozenge tilings of the triangular lattice. It covers the dice lattice, square-type tilings and everything in between. All tilings are degenerate classically. Quantum fluctuations and a magnetic field lift this degeneracy and select a staircase of periodic crystals (M_dice/6, M_dice/3, hub-free M_dice/2, 2M_dice/3).
 
 **한국어 요약.** 로젠지 타일링이 만드는 이분 격자 위 Heisenberg 반강자성체의 논문 코드와 데이터입니다. 구성 요소는 SSE 양자 몬테카를로(스핀 S, 자기장), 정확 대각화, 임의 그래프 스핀파 이론(실공간·Bloch), 주기 타일링 전수 열거, 어닐링, 타일링 몬테카를로, 그리고 곡률(높이 표현) 분석입니다. 모든 스크립트는 `data/` 폴더에서 실행합니다(아래 참조).
 
 ---
+
+## Update history
+
+- **v7 (2026-10):** five authors and NRF acknowledgment; APS-length abstract; Appendix C (classical strings) removed; new M/6 and M/3 crystals (QMC L = 36, 3 + 2 seeds); thermodynamic square reference; steps 0.085, 0.139, 0.173, 0.211, 0.268 J (bootstrap presence 100 % for all plateaus); Sec. V C defect lattice gas (Fig. 11). See `CHANGES.md`.
 
 ## Repository layout
 
@@ -73,16 +77,18 @@ The first call of a numba-accelerated module compiles it (a few seconds). The QM
 | Fig. 2 coordination model | `degfit.py`, `degfit_m.py`, `fit_scaled.py`, `paper_figs.py fig2` | `degfit_m.npz`, `scaled_model.json`, QMC logs |
 | Fig. 3 tilt family, walls | `tilt.py`, `walls.py`, `fig_tilt.py`, `paper_figs.py fig3` | `q*.log`, `r_*.log`, `walls.json` |
 | Sec. IV B moment cost / hub-free bound | `per_hist.py`, `per_cell.py` | `hist_cells/`, `cell_scan/` |
-| Figs. 4–5, Tables I & III crystals and staircase | `periodic.py`, `per_big.py`, `big_lswt.py`, `qmc_pkl.py`, `qmc_ckpt.py`, `big_fig.py`, `stair_boot.py`, `paper_figs.py fig4 fig5` | `big_*.json`, `big_m*_L36.pkl`, `qbig_*.log`, `qc.log`, `big_staircase.json`, `paper/stair_boot.json` |
+| Figs. 4–5, Tables I & III crystals and staircase | `periodic.py`, `per_big.py`, `big_lswt.py`, `qmc_pkl.py`, `qmc_ckpt.py`, `big_fig.py`, `paper_data_v4.py`, `stair_update.py`, `stair_boot.py`, `paper_figs.py fig4 fig5` | `big_*.json`, `big_m{12,9}_L36.pkl`, `qnew/lswtbest_M{6,3}_L36.pkl`, `qbig_*.log`, `qnew/q_M*_s*.log`, `qc.log`, `qnew/stair/stair_esqTD.json`, `big_staircase.json`, `paper/stair_boot.json` |
+| Class-resolved enumeration, Bloch-LSWT hull (cells ≤ 36 sites, 48-site check) | `enum_nb.py`, `ce/run_enum.sh`, `rank_bloch.py`, `make_qmc.py`, `ce/bloch_all.py`, `qnew_run.sh` | `ce/cand_*.json`, `ce/enum_log.jsonl`, `ce/bloch_lswt_full36.json`, `ce/bloch_all.out`, `ce/enum48.out` |
+| Sec. V C, Fig. 11 defect lattice gas | `ce/features.py`, `ce/fit.py`, `ce/ce_hull.py`, `ce/contacts.py`, `ce/decomp.py`, `ce/cmp_qmc.py`, `ce/transfer.py`, `ce_fig.py` | `ce/X.npy`, `ce/hubfree_lswt.json`, `ce/fit.json`, `ce/ce_hull.json`, `ce/distinct.json`, `paper/defectgas.json` |
 | irregular networks | `anneal.py` (LSWT annealing), `fast_anneal.py` (two-stage), `hull_qmc_b.py` | `ann_*.pkl`, `fa_*.pkl`, `hull_fa_*.json`, `hull_qmc_b.json` |
 | Fig. 6 fluctuations/entanglement | `paper_data.py`, `lswt_fluct.py`, `paper_figs.py fig6` | `paper/fluct_structs.json` |
 | Fig. 7 S(q, ω) | `paper_data.py`, `paper_figs.py fig7` | `paper/sqw_structs.npz` |
 | Fig. 8, Table II spin S | `sse_s.py`, `qmc_s.py`, `spinS_analysis.py`, `paper_figs.py fig8` | `qs_S.log`, `spinS.json` |
 | Fig. 9 finite T | `tiling_mc.py`, `melt.py`, `paper_figs.py fig9` | `melt.json`, `paper/Tm.json` |
 | Fig. 10, Sec. VIII curvature | `lift.py`, `curv_fig.py` | `paper/curvature.json`, `paper/pleated_L36.pkl` |
-| App. A LSWT hull | `hull_fa.py`, `paper_figs.py figA1` | `hull_fa_*.json` |
-| App. B tests (Fig. A2) | `fit_pair.py`, `wall_d.py`, `wall_d2.py`, `cool_test.py`, `magnonF.py`, `magnonF_bloch.py`, `paper_figs.py figA2` | `paper/model_test.json`, `paper/wall_d*.json`, `paper/cool_test.json`, `paper/magnonF*.json` |
-| App. C classical strings | `run_h0.py`, `fit_h0.py`, `torus.py`, `curved.py`, `fig.py`, `fig_curved.py` | `comp_*.pkl`, `eq*.pkl`, `r*_h0.1.pkl`, `curved.pkl` |
+| App. B LSWT hull (Fig. A1) | `hull_fa.py`, `paper_figs.py figA1` | `hull_fa_*.json` |
+| App. A tests (Fig. A2) | `fit_pair.py`, `wall_d.py`, `wall_d2.py`, `cool_test.py`, `magnonF.py`, `magnonF_bloch.py`, `paper_figs.py figA2` | `paper/model_test.json`, `paper/wall_d*.json`, `paper/cool_test.json`, `paper/magnonF*.json` |
+| classical strings (former App. C, removed from the manuscript in v7) | `run_h0.py`, `fit_h0.py`, `torus.py`, `curved.py`, `fig.py`, `fig_curved.py` | `comp_*.pkl`, `eq*.pkl`, `r*_h0.1.pkl`, `curved.pkl` |
 | ED (27 sites), windings, U-strings | `ed_dice.py`, `run_ed.py`, `wind.py`, `run_wind.py`, `hi_sectors.py`, `field_curves.py`, `ushape.py`, `run_u.py`, `u_analyze.py`, `fig_u.py` | `ed_*.log`, `ed_nh*.pkl`, `hi_sectors.pkl`, `field_curves.pkl` |
 | slides | `slide_figs.py`, `curv_fig.py` (`slide_fig`) | writes `slides/img/` |
 
@@ -103,7 +109,9 @@ Other files in `code/`:
 - **File-name patterns:**
   - `ann_L_sector_h_seed_steps.pkl`: LSWT annealing
   - `fa_L_sector_h_seed.pkl`: two-stage annealing
-  - `big_m{12,9,36,18}_L36.pkl`: the M/2, 2M/3, M/6 and M/3 crystals (m = 1/12, 1/9, 1/36, 1/18)
+  - `big_m{12,9}_L36.pkl`: the M/2 and 2M/3 crystals (m = 1/12, 1/9)
+  - `qnew/lswtbest_M{6,3}_L36.pkl`: the M/6 and M/3 crystals (m = 1/36, 1/18), LSWT-best structures from the class-resolved enumeration. They replace `big_m36_L36.pkl` and `big_m18_L36.pkl` (kept for reference).
+- **Square-type reference:** e_sq = −0.669437(5) J (thermodynamic limit, Sandvik 1997). Crystal energies have no finite-size correction at L = 36 (checked with Bloch LSWT); only the compensated reference does.
 - **Enumeration results** (`periodic_*.json`, `big_*_s*.json`): candidate tilings per supercell, with coordination histogram `hist`, imbalance `m`, model energy `e_model` and, where computed, `e_lswt` / `m_rep`.
 - **Energies:** all in units of J. The field h is in units of J (g μ_B = 1).
 
