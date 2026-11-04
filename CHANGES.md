@@ -1,29 +1,40 @@
-# Changes in this update (manuscript v7, 2026-10-17)
+# Changes in this update (manuscript v9, 2026-11-04)
+
+## v9 (text revision on top of v8)
+- Dilute limit (Sec. V D, new Eq. hc): onset field h_c as the isolated-pair limit, independent of the dilute crystals that finite cells cannot host (1/13, 1/17, ...); LSWT saturation of [e0(m)-e_sq]/m below M/11 confines them to ~1e-3 J above h_c; QMC estimate h_c = 0.036 +- 0.007 J. Discussion and Limitations updated accordingly.
+- Former Secs. VIII (finite temperature) and IX (geometric interpretation) moved to Appendices D and A; appendix figures placed in their appendices (figure order = citation order).
+- Introduction: annealed-graph setting stated; Jagannathan/Wessel line of work (Penrose phason result, SDL flips, their "order by disorder" usage) placed in context; Lieb-Mattis theorem.
+- Methods: e0 extraction stated precisely (m_meas = m to 1e-4), chi from our own L = 24 runs, beta not extrapolated (limitation), square-type L = 24 offset discussed; incorrect odd-cycle remark removed.
+- Hub-free bound: equality case stated correctly (z = 5 on every A site; 2:1:2 is the leading-order optimum at the bound).
+- Goldstone/field paragraph: U(1) breaking (spin flop) vs U(1)-preserving gapped ferrimagnets; Delta_+ compared with the upper edge of each window; 1/11 edge undetermined.
+- Overclaims removed or qualified: S-independence, "exhaustive", "densest packing" (now: of sorted vertices), irregular networks within errors of the hull, r^-3.5, melting only for the M/2 crystal of the effective model.
+- Revision-log wording removed; new paragraph on spin-lattice plateaus (Penc-Shannon-Shiba) and on robustness to further-neighbor couplings.
+- Figures: Fig. 5(b) includes m = chi h for the square-type tiling ("from QMC hull"); Fig. 4 legend; Fig. 8 channel labels in words; Fig. 9 normalized by h_sat = 9JS.
+- References: +8 (Lieb-Mattis 1962, Henley 2006, Wessel 2003, Moessner-Sondhi-Chandra 2001, Penc-Shannon-Shiba 2004, Watanabe-Brauner 2011, Wang-Sandvik 2006, Bloete-Hilhorst 1982), all checked against DOI/arXiv pages; bibliography reordered by first citation (34 entries).
+
+# v8
 
 Unzip over the repository root. Files are only added or replaced; nothing is deleted.
 
+## Physics changes behind v8
+- **Hub-free bound.** Bond counting (sum of z over sublattice A = 2N) and Lieb's theorem give M <= (3/5) M_dice for every tiling without z = 6 hubs; equality needs z = 5 on every minority site (z3:z4:z5 = 2:1:2). The v7 statement "no hub-free tiling has M > M_dice/2" was an artefact of restricting the search to cells that fit an L = 36 torus.
+- **Unrestricted enumeration.** All supercells with up to 48 sites (403 classes up to D6; 238 of the 260 new classes completed, 22 cells with 47-48 sites not finished). New LSWT hull points at M/Md = 1/15, 3/41, 1/11, 1/9, 1/7, 1/5, 1/4 and 3/5.
+- **3/5 crystal**, cell (10,2,1), 20 sites, tilt 30 deg: QMC delta e = -5.25(11)e-3 J (3 seeds, 8x8 copies of the cell, N = 1280). Deepest hull point, plateau 0.173-0.268 J, present in 100 % of bootstrap hulls.
+- **New QMC staircase** (S = 1/2): 0 -0.031-> 1/11 -0.119-> 1/9 -0.132-> 1/4 -0.151-> 1/3 -0.173-> 3/5 -0.268-> 1. M/2 and 2M/3 lie on chords of the hull (bootstrap presence ~0.5); the low-field steps are dense and individually unresolved; the onset (0.031 +- 0.015 J) is the least certain number.
+- **Ising-limit expansion** (new Sec. IV B, `code/ising2.py`): e = -S^2 N_b/N - (S/N) sum_<ij> 1/(z_i + z_j - 1/S); gives convex eps(z) = -JS z/(z+4-1/S), contact energies (+4.8e-3 J unlike, -8.3/-3.0e-3 J like) and the hull shape without fit parameters.
+- **Entanglement bug fixed** (`code/ent_fix.py`): the v7 half-torus entropy used a non-symmetric block; the corrected covariance-matrix calculation gives S(whole system) = 3e-11. Fig. 6(b) and its text are redone.
+
 ## manuscript/
-- `main.tex`, `main.pdf`: v7. Five authors (Suhwan Yoo, Jeehoon Choi, Chaeyeon Kim, Hee Young Kim, Changyeon Won), NRF acknowledgment (NRF-2023R1A2C1006050), APS-length abstract, Appendix C removed (appendices are now A = tests, B = LSWT hull), new Sec. V C (defect lattice gas).
-- `figs/`: all figures regenerated; new `fig11_defectgas.pdf`. Fig. 2(a) now shows eps(z) minus the dice chord.
+- `main.tex`, `main.pdf` (18 pages): new abstract and results list, Sec. IV B (Ising expansion), Sec. IV C (bound, Eq. 7), Sec. V A rewritten (two-stage search), Table I extended (presence column; the old robustness table is merged into it), Secs. V B-C, VI, VIII, IX, X and Appendix B updated.
+- `figs/`: fig4 (M/4, M/3, 3M/5 crystals), fig5 (new hull with hub-free bound), fig6 (corrected entanglement), fig7 (3M/5 crystal instead of M/2), fig10 (3M/5 panel instead of 2M/3).
 
-## Physics changes behind v7
-- Square-type reference: e_sq = -0.669437(5) J (thermodynamic limit, Sandvik 1997) instead of the L = 24 value -0.66917(30) J. Bloch LSWT shows that crystals with an extensive moment have no global finite-size term, so only the compensated reference needed the correction.
-- M/6 and M/3 crystals replaced by the LSWT-best structures from the class-resolved enumeration (`data/qnew/lswtbest_M{6,3}_L36.pkl`), QMC at L = 36 with 3 (M/6) and 2 (M/3) seeds.
-- delta e (1e-3 J): M/6 -3.13(11), M/4 -2.77(31), M/3 -4.53(9), M/2 -4.98(9), 2M/3 -4.37(12).
-- Step fields: 0.085, 0.139, 0.173, 0.211, 0.268 J. `stair_update.py` on its 0.0001 J grid prints 0.174 and 0.212. The manuscript quotes the exact chord slopes, which are 0.173 and 0.211.
-- Bootstrap (4000 samples): every plateau is present in 100 % of samples.
-- Enumeration up to 48-site cells found no new hull vertices.
+## code/
+- `cells_all.py`, `enum_any.py` (unrestricted enumeration), `cellgraph.py`, `qdec_cell.py`, `runc.sh` (SSE on k x k copies of a cell), `tocell.py`, `new_structs.py` (LSWT data on L x L tori that fit the new cells), `stair_v8.py` (hull, steps, bootstrap; run from data/), `qhull.py`, `ising2.py`, `ent_fix.py`, `paper_figs.py`, `curv_fig.py`.
 
-## code/ (new or replaced)
-- `paper_figs.py` (new reference, new Fig. 2a), `paper_data_v4.py` (inserts the new crystals into `paper/structs_L36.pkl`, recomputes fluctuations), `ce_fig.py` (Fig. 11).
-- `enum_nb.py` (numba class-resolved enumeration), `rank_bloch.py`, `make_qmc.py`, `stair_update.py` (all run from `data/`), `qnew_run.sh`.
-- `ce/`: cluster-expansion (defect lattice gas) scripts; run them from `data/ce/`.
-- Not changed, but still using the old reference -0.66917: `big_fig.py`, `final_c.py`, `fit_qmc_model.py`, `fit_scaled.py`, `hull_qmc_b.py`. They are not used for the v7 staircase numbers. `fit_scaled.py` and `hull_qmc_b.py` feed only the model-rescaling panel and the irregular-network circles, whose shift is far below the plotted scale.
-
-## data/ (new or replaced)
-- `big_staircase.json`, `paper/stair_boot.json`, `paper/structs_L36.pkl`, `paper/fluct_structs.json`, `paper/curvature.json`, `paper/defectgas.json`.
-- `qnew/`: new crystals, QMC logs, and `stair/stair_esqTD.json` + png. QMC checkpoints are not included.
-- `ce/`: enumeration candidates for all cells of 36 sites or fewer plus the 48-site cells (`cand_*.json`), Bloch-LSWT energies, cluster-expansion fit and hull.
+## data/
+- `k1/`: cell classes, enumeration log, Bloch-LSWT ranking (`rank_result.json`, `bloch_cache.json`). The candidate files `cand_*.json` (0.5 GB) are not included; they are regenerated by `enum_any.py`.
+- `qdec_cells/`: cell definitions and SSE logs of the new crystals.
+- `paper/`: `staircase_v8.json`, `fluct_v8.json`, `lswt_M*.json`, `sqw_M35.npz`, `structs_v8.pkl`, `ent_fix.json`.
 
 ## Not yet updated
-- `slides/` still uses the old step fields and crystals.
+- Staggered-dice-lattice QMC check (running), more seeds for the single-seed low-field crystals, the 22 unfinished 47-48-site cells.

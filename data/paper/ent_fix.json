@@ -1,0 +1,26 @@
+{
+ "square": {
+  "S_half_per_length": 0.17439917753131537,
+  "S_all": 3.427036432413069e-11
+ },
+ "M6": {
+  "S_half_per_length": 0.20143674552203306,
+  "S_all": null
+ },
+ "M3": {
+  "S_half_per_length": 0.1871974131096636,
+  "S_all": null
+ },
+ "M2": {
+  "S_half_per_length": 0.17206593257660435,
+  "S_all": null
+ },
+ "M23": {
+  "S_half_per_length": 0.1754850913268093,
+  "S_all": null
+ },
+ "dice": {
+  "S_half_per_length": 0.12817594729885481,
+  "S_all": null
+ }
+}

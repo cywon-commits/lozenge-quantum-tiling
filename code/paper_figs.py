@@ -22,14 +22,17 @@ lin = lambda m: ESQ + (ED - ESQ) * 6 * m
 A1 = np.array([1.0, 0]); A2 = np.array([0.5, np.sqrt(3) / 2])
 ZC = {3: '#c6dbef', 4: '#6baed6', 5: '#2171b5', 6: '#08306b'}   # one hue, light -> dark with z
 ZS = {3: 2.6, 4: 3.1, 5: 3.6, 6: 4.2}
+from matplotlib.colors import TwoSlopeNorm as _TSN
+SZCMAP = plt.get_cmap('RdBu_r'); SZNORM = _TSN(0, -0.45, 0.45)      # diverging, neutral at S^z = 0
 TILE = {0: '#f3e3b8', 1: '#d7e6ef', 2: '#e9dcef'}
+TILEG = {0: '#f2f2f2', 1: '#e2e2e2', 2: '#d0d0d0'}                 # neutral tiles under the S^z coloring (Fig. 4)
 
 
 def tag(ax, s, x=-0.02, y=1.0, **kw):
     ax.text(x, y, s, transform=ax.transAxes, ha='right', va='bottom', fontsize=10, fontweight='bold', **kw)
 
 
-def draw_tiling(ax, T, win, rot=-30, zcol=True):
+def draw_tiling(ax, T, win, rot=-30, zcol=True, sz=None, tile=None):
     L = T.L; z = degrees(T)
     R = np.array([[np.cos(np.radians(rot)), -np.sin(np.radians(rot))], [np.sin(np.radians(rot)), np.cos(np.radians(rot))]])
     Tv = [L * A1, L * A2]; shifts = [a * Tv[0] + b * Tv[1] for a in range(-2, 3) for b in range(-2, 3)]
@@ -43,12 +46,13 @@ def draw_tiling(ax, T, win, rot=-30, zcol=True):
         for s in shifts:
             Q = (P + s) @ R.T; c = Q.mean(0)
             if x0 - 1 <= c[0] <= x1 + 1 and y0 - 1 <= c[1] <= y1 + 1:
-                ax.add_patch(Polygon(Q, fc=TILE[o], ec='#666666', lw=0.45))
+                ax.add_patch(Polygon(Q, fc=(tile or TILE)[o], ec='#666666', lw=0.45))
     for i in range(T.N):
         for s in shifts:
             p = (T.pos[i] + s) @ R.T
             if x0 <= p[0] <= x1 and y0 <= p[1] <= y1:
-                ax.plot(*p, 'o', ms=ZS[int(z[i])], mfc=ZC[int(z[i])], mec='k', mew=0.3, zorder=3)
+                fc = ZC[int(z[i])] if sz is None else SZCMAP(SZNORM(sz[i]))
+                ax.plot(*p, 'o', ms=ZS[int(z[i])] + (0.6 if sz is not None else 0), mfc=fc, mec='k', mew=0.3, zorder=3)
     ax.set_xlim(x0, x1); ax.set_ylim(y0, y1); ax.set_aspect('equal'); ax.axis('off')
 
 
@@ -144,84 +148,121 @@ def fig3():
     k = ~(np.isclose(fr, 1 / 3, atol=.02) | np.isclose(fr, .5, atol=.02) | np.isclose(fr, 2 / 3, atol=.02))
     if k.any(): ax.errorbar(Ls[k], sg[k], ss[k], fmt='D', color=C['gray'], capsize=2, label='other fractions')
     ax.axhline(0, color='k', lw=0.6)
-    ax.set_xlabel('torus size $L$'); ax.set_ylabel(r'wall energy $\sigma$ ($J/a$)'); ax.set_ylim(-0.022, 0.011)
-    ax.legend(loc='upper center', ncol=2, columnspacing=0.8); tag(ax, '(b)', x=-0.2)
+    ax.set_xlabel('torus size $L$'); ax.set_ylabel(r'wall energy $\sigma$ ($J/a$)'); ax.set_ylim(-0.022, 0.013)
+    ax.legend(loc='upper center', ncol=2, columnspacing=0.5, handletextpad=0.2, handlelength=1.0, fontsize=7, borderaxespad=0.4); tag(ax, '(b)', x=-0.2)
     plt.tight_layout(h_pad=1.2); fig.savefig(OUT + 'fig3_tilt_walls.pdf')
 
 
 # ------------------------------------------------------------------ Fig 4: crystals
 def fig4():
-    S = pickle.load(open('paper/structs_L36.pkl', 'rb'))
-    fig, axs = plt.subplots(1, 3, figsize=(W2, 2.2))
+    """Crystals; sites colored by the LSWT local moment <S^z_i> (S=1/2, field-polarized Lieb state), size by z.
+    Local moments from szmap.py (thermodynamic-limit LSWT, paper/sz_local.json)."""
+    from matplotlib.colors import TwoSlopeNorm
+    from matplotlib.cm import ScalarMappable
+    S = pickle.load(open('paper/structs_L36.pkl', 'rb')); D = json.load(open('paper/sz_local.json'))
+    S8 = pickle.load(open('paper/structs_v8.pkl', 'rb'))
+    fig, axs = plt.subplots(1, 3, figsize=(W2, 2.05))
     win = (-0.5, 11.5, -0.5, 9.1)
-    ttl = {'M6': r'$M_{\rm dice}/6$  (cell $9\times4$)', 'M2': r'$M_{\rm dice}/2$ (cell $6\times4$, no hubs)',
-           'M23': r'$2M_{\rm dice}/3$  (cell $9\times4$)'}
-    for ax, k, s in zip(axs, ('M6', 'M2', 'M23'), 'abc'):
-        T = Tiling(36); T.removed = S[k]; draw_tiling(ax, T, win); ax.set_title(f'({s}) '+ttl[k], pad=3)
-    plt.subplots_adjust(wspace=0.04, bottom=0.1); zlegend(fig, y=-0.02)
+    ttl = {'M14': r'$M_{\rm dice}/4$  (cell $8\times3$)', 'M3': r'$M_{\rm dice}/3$  (cell $9\times4$)',
+           'M35': r'$3M_{\rm dice}/5$ (cell $10\times2$, no hubs)'}
+    for ax, k, s in zip(axs, ('M14', 'M3', 'M35'), 'abc'):
+        if k in S8:
+            T = Tiling(S8[k]['L']); T.removed = set(S8[k]['removed']); sz = np.array(json.load(open(f'paper/lswt_{k}.json'))['sz'])
+        else:
+            T = Tiling(36); T.removed = S[k]; sz = np.array(D[k]['sz'])
+        draw_tiling(ax, T, win, sz=sz, tile=TILEG); ax.set_title(f'({s}) '+ttl[k], pad=3)
+    plt.subplots_adjust(wspace=0.04, bottom=0.13, top=0.92)
+    h = [Line2D([], [], marker='o', ls='', ms=ZS[k] + 0.6, mfc='#bbbbbb', mec='k', mew=0.4, label=f'$z={k}$') for k in (3, 4, 5)]
+    fig.legend(handles=h, title='symbol size:', title_fontsize=7.5, loc='lower left', ncol=4, bbox_to_anchor=(0.08, -0.005), handletextpad=0.1, columnspacing=0.9, frameon=False)
+    cax = fig.add_axes([0.56, 0.045, 0.34, 0.035])
+    cb = fig.colorbar(ScalarMappable(norm=SZNORM, cmap=SZCMAP), cax=cax, orientation='horizontal', ticks=[-0.4, -0.2, 0, 0.2, 0.4])
+    cb.set_label(r'$\langle S^z_i\rangle$ (LSWT)', labelpad=1); cb.ax.tick_params(labelsize=7, length=2)
     fig.savefig(OUT + 'fig4_crystals.pdf')
 
 
 # ------------------------------------------------------------------ Fig 5: hull and staircase
 def fig5():
-    B = json.load(open('big_staircase.json')); P = np.array(B['points'])
-    m, e, er = P[:, 0], P[:, 1], P[:, 2]
+    """v8: hull from paper/staircase_v8.json (published crystals + crystals of the unrestricted enumeration)."""
+    V = json.load(open('paper/staircase_v8.json')); P = V['points']; keys = V['keys']
+    m = np.array([P[k]['m'] for k in keys]); e = np.array([P[k]['e'] for k in keys]); er = np.array([P[k]['er'] for k in keys])
+    steps = [s[0] for s in V['steps']]
     A = json.load(open('hull_qmc_b.json'))
-    fig, axs = plt.subplots(1, 2, figsize=(W2, 2.75))
+    fig, axs = plt.subplots(2, 2, figsize=(W2, 5.45)); axs = axs.ravel()
     ax = axs[0]
     first = True
     for L, pts in A.items():
         q = [p for p in pts if p['pkl'] not in ('square', 'dice')]
         ax.errorbar([6 * p['m'] for p in q], [1e3 * (p['e0'] - lin(p['m'])) for p in q], [1e3 * p['err'] for p in q],
-                    fmt='o', ms=3.5, color=C['gray'], mfc='white', capsize=0, lw=0.8, label='irregular (annealed) networks' if first else None)
+                    fmt='o', ms=3.5, color=C['gray'], mfc='white', capsize=0, lw=0.8, label='annealed networks' if first else None)
         first = False
-    ax.errorbar(6 * m, 1e3 * (e - lin(m)), 1e3 * er, fmt='s', color=C['red'], ms=5, capsize=2, label='periodic crystals')
-    # lower hull
+    hub = np.array([k in ('M23', 'dice') for k in keys])
+    ax.errorbar(6 * m[~hub], 1e3 * (e[~hub] - lin(m[~hub])), 1e3 * er[~hub], fmt='s', color=C['red'], ms=5, capsize=2, label='crystals, hub-free')
+    ax.errorbar(6 * m[hub], 1e3 * (e[hub] - lin(m[hub])), 1e3 * er[hub], fmt='D', color=C['blue'], ms=4.5, capsize=2, label='crystals with hubs')
     from hull_lswt import lower_hull
-    H = lower_hull(m, e); ax.plot(6 * m[H], 1e3 * (e[H] - lin(m[H])), '-', color=C['red'], lw=1.0, zorder=0, label='lower convex hull')
-    lab = {1 / 6: (r'$\frac{1}{6}$', -0.05, 0.0, 'right'), 1 / 4: (r'$\frac{1}{4}$', -0.005, -0.62, 'center'), 1 / 3: (r'$\frac{1}{3}$', -0.05, -0.55, 'right'),
-           1 / 2: (r'$\frac{1}{2}$', 0.0, -0.75, 'center'), 2 / 3: (r'$\frac{2}{3}$', 0.05, -0.2, 'left')}
-    ax2 = ax.secondary_xaxis('top'); ax2.set_xticks([1/6, 1/4, 1/3, 1/2, 2/3])
-    ax2.set_xticklabels([r'$\frac{1}{6}$', r'$\frac{1}{4}$', r'$\frac{1}{3}$', r'$\frac{1}{2}$', r'$\frac{2}{3}$']); ax2.tick_params(direction='in', pad=2)
-    for x in (1/6, 1/4, 1/3, 1/2, 2/3): ax.axvline(x, color='#dddddd', lw=0.6, zorder=-1)
+    H = lower_hull(m, e); ax.plot(6 * m[H], 1e3 * (e[H] - lin(m[H])), '-', color=C['red'], lw=1.0, zorder=0, label='lower hull')
+    ax.axvline(0.6, color=C['green'], lw=1.0, ls='--', zorder=-1); ax.text(0.62, -6.2, 'hub-free bound', color=C['green'], fontsize=7.5, va='bottom')
+    tk = [1/7, 1/5, 1/3, 1/2, 3/5, 2/3]; tl = [r'$\frac{1}{7}$', r'$\frac{1}{5}$', r'$\frac{1}{3}$', r'$\frac{1}{2}$', r'$\frac{3}{5}$', r'$\frac{2}{3}$']
+    ax2 = ax.secondary_xaxis('top'); ax2.set_xticks(tk); ax2.set_xticklabels(tl, fontsize=8); ax2.tick_params(direction='in', pad=2)
+    for x in (1/7, 1/6, 1/5, 1/4, 1/3, 1/2, 3/5, 2/3): ax.axvline(x, color='#e3e3e3', lw=0.6, zorder=-2)
     ax.axhline(0, color='k', lw=0.5, ls=':')
-    ax.set_xlabel(r'$M/M_{\rm dice}$'); ax.set_ylabel(r'$e_0-e_{\rm lin}$  ($10^{-3}J$ per site)'); ax.set_ylim(-6.4, 3.3)
-    ax.legend(loc='upper center', handlelength=1.5); tag(ax, '(a)', x=-0.15)
+    ax.set_xlabel(r'$M/M_{\rm dice}$'); ax.set_ylabel(r'$e_0-e_{\rm lin}$  ($10^{-3}J$ per site)'); ax.set_ylim(-6.4, 3.6)
+    ax.legend(loc='upper left', handlelength=1.4, fontsize=7); tag(ax, '(a)', x=-0.04, y=1.01)
     ax = axs[1]
     hs = np.linspace(0, 0.35, 3501); chi = np.where(m == 0, 0.065, 0.0)
     G = e[None, :] - hs[:, None] * m[None, :] - 0.5 * chi[None, :] * hs[:, None] ** 2; sel = G.argmin(1)
-    ax.plot(hs, 6 * m[sel], '-', color=C['blue'], lw=1.8, label=r'QMC, $S=\frac{1}{2}$')
+    ax.plot(hs, 6 * (m[sel] + chi[sel] * hs), '-', color=C['blue'], lw=1.8, label=r'from QMC hull, $S=1/2$')
     ax.plot([0, 0, 0.35], [0, 1, 1], '--', color=C['red'], lw=1.2, label='classical')
-    for y, s in ((1 / 6, r'$\frac{1}{6}$'), (1 / 3, r'$\frac{1}{3}$'), (1 / 2, r'$\frac{1}{2}$'), (2 / 3, r'$\frac{2}{3}$')):
+    ax.axhline(0.6, color=C['green'], lw=0.8, ls='--', zorder=-1)
+    for y, s in ((1 / 3, r'$\frac{1}{3}$'), (3 / 5, r'$\frac{3}{5}$')):
         i = np.where(np.isclose(6 * m[sel], y, atol=1e-3))[0]
         if len(i): ax.text(hs[i].mean(), y + 0.03, s, ha='center', va='bottom', fontsize=9)
-    for hh in B['steps']: ax.axvline(hh[0], color=C['gray'], lw=0.4, ls=':')
+    for hh in steps: ax.axvline(hh, color=C['gray'], lw=0.4, ls=':')
     ax.set_xlabel('$h/J$'); ax.set_ylabel(r'$M/M_{\rm dice}$'); ax.set_xlim(0, 0.35); ax.set_ylim(-0.03, 1.1)
-    ax.legend(loc='lower right'); tag(ax, '(b)', x=-0.15)
-    plt.tight_layout(w_pad=1.5); fig.savefig(OUT + 'fig5_staircase.pdf')
+    ax.legend(loc='upper left', bbox_to_anchor=(0.03, 0.93)); tag(ax, '(b)', x=-0.04, y=1.01)
+    # (c), (d): energy decomposition along the QMC ground-state path
+    Q = json.load(open('paper/qdec.json')); hsq = np.array(Q['square']['h'])
+    path = V['path']; win = dict(zip(path, zip([0.0] + steps, steps + [0.35])))
+    ax = axs[2]
+    for q, c, lab_ in (('Exy', C['blue'], r'$E_{\rm inplane}$ ($xx+yy$)'), ('Ezz', C['red'], r'$E_{\rm normal}$ ($zz$)')):
+        ys = np.array(Q['square'][q]); ax.plot(np.r_[0, hsq], np.r_[Q['h0'][q], ys], '--', color=c, lw=0.8)
+        ax.plot(hsq, ys, 'o', color=c, ms=3, mfc='white')
+        for j, k in enumerate(path[1:]):
+            x0, x1 = win[k]; ax.plot([x0, x1], [P[k][q]] * 2, '-', color=c, lw=1.8, label=lab_ if j == 0 else None)
+        ax.plot([0], [Q['h0'][q]], 's', color=c, ms=4.5, mfc='white', mew=1.0, clip_on=False)
+    for hh_ in steps: ax.axvline(hh_, color=C['gray'], lw=0.4, ls=':')
+    ax.set_xlabel('$h/J$'); ax.set_ylabel(r'energy ($J$ per site)'); ax.set_xlim(0, 0.35); ax.set_ylim(-0.50, -0.16); ax.legend(loc='upper right', bbox_to_anchor=(1.0, 0.91), fontsize=7.5, handlelength=1.5); tag(ax, '(c)', x=-0.04, y=1.01)
+    ax = axs[3]
+    hs2 = np.linspace(0, 0.35, 3501); sel2 = (e[None, :] - hs2[:, None] * m[None, :] - 0.5 * chi[None, :] * hs2[:, None] ** 2).argmin(1)
+    ex = e[sel2] + 0.5 * chi[sel2] * hs2 ** 2; ze = -hs2 * m[sel2] - chi[sel2] * hs2 ** 2; e_sq = e[m == 0][0]
+    ax.plot(hs2, 1e3 * (ex - e_sq), '-', color=C['red'], lw=1.6, label=r'exchange, $E_{\rm inplane}+E_{\rm normal}-e_{\rm sq}$')
+    ax.plot(hs2, 1e3 * ze, '-', color=C['blue'], lw=1.6, label=r'Zeeman, $-h\langle S^z\rangle$')
+    ax.plot(hs2, 1e3 * (ex + ze - e_sq), '-', color='k', lw=1.2, label=r'total $-\,e_{\rm sq}$')
+    ax.axhline(0, color='k', lw=0.5, ls=':')
+    for hh_ in steps: ax.axvline(hh_, color=C['gray'], lw=0.4, ls=':')
+    ax.set_xlabel('$h/J$'); ax.set_ylabel(r'energy ($10^{-3}J$ per site)'); ax.set_xlim(0, 0.35); ax.legend(loc='lower left', fontsize=7.5); tag(ax, '(d)', x=-0.04, y=1.01)
+    plt.tight_layout(w_pad=3.0, h_pad=3.6); fig.savefig(OUT + 'fig5_staircase.pdf')
 
 
 # ------------------------------------------------------------------ Fig 6: fluctuations
 def fig6():
-    F = json.load(open('paper/fluct_structs.json')); B = json.load(open('big_staircase.json'))
-    order = ['square', 'M6', 'M3', 'M2', 'M23', 'dice']
-    steps = [0] + [s[0] for s in B['steps']] + [0.35]
-    # the marginal M/3 window (width 0.004 J) is merged into its neighbours for display
+    """v8: crystals on the QMC path (paper/staircase_v8.json); corrected Gaussian entanglement (covariance method, ent_fix.py)."""
+    F = json.load(open('paper/fluct_v8.json')); V = json.load(open('paper/staircase_v8.json'))
+    order = V['path']; steps = [0] + [s[0] for s in V['steps']] + [0.35]
     fig, axs = plt.subplots(2, 1, figsize=(W1, 4.6), sharex=True)
-    def stair(ax, key, col, lab, scale=1):
+    def stair(ax, key, col, lab):
         for k, (a, b) in zip(order, zip(steps[:-1], steps[1:])):
-            ax.plot([a, b], [scale * F[k][key]] * 2, '-', color=col, lw=2)
+            ax.plot([a, b], [F[k][key]] * 2, '-', color=col, lw=2)
         for k1, k2, x in zip(order[:-1], order[1:], steps[1:-1]):
-            ax.plot([x, x], [scale * F[k1][key], scale * F[k2][key]], '-', color=col, lw=0.8)
+            ax.plot([x, x], [F[k1][key], F[k2][key]], '-', color=col, lw=0.8)
         ax.plot([], [], '-', color=col, lw=2, label=lab)
     stair(axs[0], 'n', C['blue'], r'spin deviation $\langle\Delta S\rangle$')
     stair(axs[0], 's_site', C['red'], r'site entropy $s_1$ (nats)')
     axs[0].set_ylabel('per site'); axs[0].legend(loc='center left', bbox_to_anchor=(0, 0.47)); axs[0].set_ylim(0, 0.58); tag(axs[0], '(a)', x=-0.2)
     stair(axs[1], 'S_half', C['green'], r'$S_{A}/\ell$, half-torus cut')
-    axs[1].set_ylabel(r'entanglement per boundary length'); axs[1].legend(loc='lower left'); tag(axs[1], '(b)', x=-0.2)
-    lab = {'square': '0', 'M6': r'$\frac{1}{6}$', 'M3': r'$\frac{1}{3}$', 'M2': r'$\frac{1}{2}$', 'M23': r'$\frac{2}{3}$', 'dice': '1'}
+    axs[1].set_ylabel(r'$S_A/\ell$ (nats)'); axs[1].legend(loc='lower left'); tag(axs[1], '(b)', x=-0.2)
+    lab = {'square': '0', 'M111': r'$\frac{1}{11}$', 'M17': r'$\frac{1}{7}$', 'M3': r'$\frac{1}{3}$', 'M35': r'$\frac{3}{5}$', 'dice': '1'}
     for k, (a, b) in zip(order, zip(steps[:-1], steps[1:])):
-        axs[1].text((a + b) / 2, F[k]['S_half'] - 0.004, lab[k], ha='center', va='top', fontsize=8.5)
+        if k in lab: axs[1].text((a + b) / 2, F[k]['S_half'] - 0.004, lab[k], ha='center', va='top', fontsize=8.5)
     axs[1].set_xlabel('$h/J$  (QMC phase boundaries)'); axs[1].set_xlim(0, 0.35)
     lo = min(F[k]['S_half'] for k in order); hi = max(F[k]['S_half'] for k in order)
     axs[1].set_ylim(lo - 0.05, hi + 0.012)
@@ -230,20 +271,51 @@ def fig6():
 
 # ------------------------------------------------------------------ Fig 7: S(q,w)
 def fig7():
+    """Top: S^xx(q, w) at h = 0 (as before). Bottom: transverse spectra in a field inside each plateau
+    (sqw_field.py): ferrimagnets resolved by dS^z = -1 (cyan, w + h) and dS^z = +1 (orange, w - h);
+    square-type spin-flop state (white, not resolved: dS^z is not a good quantum number of its magnons)."""
     d = np.load('paper/sqw_structs.npz'); wg, sg = d['wg'], d['sg']; t = sg / 36
+    F = np.load('paper/sqw_field.npz'); HF = json.load(open('paper/sqw_field.json'))
+    vmin, vmax = -2.3, 0.8
+    nrm = lambda I: np.clip((np.log10(I.T + 1e-3) - vmin) / (vmax - vmin), 0, 1)
     fig, axs = plt.subplots(2, 3, figsize=(W2, 4.1), sharex=True, sharey=True)
-    ttl = {'square': 'square-type', 'M2': r'$M_{\rm dice}/2$ crystal', 'dice': 'dice'}
-    for j, k in enumerate(('square', 'M2', 'dice')):
-        for i, (cut, clab) in enumerate((('b1', r'$\mathbf{q}=s\,\mathbf{b}_1$'), ('b12', r'$\mathbf{q}=s(\mathbf{b}_1+\mathbf{b}_2)$'))):
-            ax = axs[i, j]; I = d[f'{k}_{cut}']
-            im = ax.imshow(np.log10(I.T + 1e-3), origin='lower', aspect='auto', extent=[t[0], t[-1], wg[0], wg[-1]],
-                           cmap='magma', vmin=-2.3, vmax=0.8, interpolation='nearest')
-            if i == 0: ax.set_title(ttl[k])
-            if j == 0: ax.set_ylabel(r'$\omega/J$')
-            if i == 1: ax.set_xlabel('$s$')
-            ax.text(0.03, 0.95, clab, transform=ax.transAxes, color='w', fontsize=8, va='top')
-            tag(ax, f'({"abcdef"[3 * i + j]})', x=0.99, y=0.86, color='w') if False else None
-    cb = fig.colorbar(im, ax=axs, shrink=0.85, pad=0.015); cb.set_label(r'$\log_{10}S^{xx}(\mathbf{q},\omega)$')
+    ttl = {'square': 'square-type', 'M35': r'$3M_{\rm dice}/5$ crystal', 'dice': 'dice'}
+    ext = [t[0], t[-1], wg[0], wg[-1]]
+    S35 = np.load('paper/sqw_M35.npz'); h35 = json.load(open('paper/lswt_M35.json'))['h_field']
+    for k_ in ('b1', 'p', 'm'): d = dict(d); F = dict(F)
+    d['M35_b1'] = S35['b1']; F['M35_p'] = S35['p']; F['M35_m'] = S35['m']; HF['M35'] = dict(h=h35)
+    for j, k in enumerate(('square', 'M35', 'dice')):
+        ax = axs[0, j]
+        im = ax.imshow(np.log10(d[f'{k}_b1'].T + 1e-3), origin='lower', aspect='auto', extent=ext, cmap='magma', vmin=vmin, vmax=vmax, interpolation='nearest')
+        ax.set_title(ttl[k]); ax.text(0.03, 0.95, r'$h=0$', transform=ax.transAxes, color='w', fontsize=8, va='top')
+        ax = axs[1, j]; h = HF[k]['h']
+        if k == 'square':
+            a = nrm(F['square_tot']); rgb = np.dstack([a, a, a])
+        else:
+            m, p = nrm(F[f'{k}_m']), nrm(F[f'{k}_p'])
+            rgb = np.clip(np.dstack([p, 0.45 * p + 0.85 * m, m]), 0, 1)       # orange = dS^z=+1, cyan = dS^z=-1
+        ax.imshow(rgb, origin='lower', aspect='auto', extent=ext, interpolation='nearest')
+        ax.text(0.03, 0.95, r'$h=%.2fJ$' % h, transform=ax.transAxes, color='w', fontsize=8, va='top')
+        ax.set_xlabel(r'$s$  ($\mathbf{q}=s\,\mathbf{b}_1$)')
+        if j == 0: [a_.set_ylabel(r'$\omega/J$') for a_ in axs[:, 0]]
+    axs[1, 2].text(0.5, 0.20, r'lowering, $\Delta S^z{=}{-}1$: $\omega+h$', transform=axs[1, 2].transAxes, color=(0, 0.85, 1), fontsize=6.8, va='center', ha='center')
+    axs[1, 2].text(0.5, 0.09, r'raising, $\Delta S^z{=}{+}1$: $\omega-h$', transform=axs[1, 2].transAxes, color=(1, 0.45, 0), fontsize=6.8, va='center', ha='center')
+    axs[1, 0].text(0.97, 0.95, 'spin flop', transform=axs[1, 0].transAxes, color='w', fontsize=7.5, va='top', ha='right')
+    # colour keys: top row magma; bottom row hue = channel, brightness = the same log10 intensity scale
+    from matplotlib.colors import LinearSegmentedColormap, Normalize
+    from matplotlib.cm import ScalarMappable
+    fig.subplots_adjust(right=0.82, hspace=0.14, wspace=0.12)
+    for a_ in axs[1]: a_.set_xticks([-1, -0.5, 0, 0.5, 1]); a_.set_xticklabels(['$-1$', '', '0', '', '1'])
+    p0, p1 = axs[0, 2].get_position(), axs[1, 2].get_position(); x = p0.x1 + 0.015
+    cb = fig.colorbar(im, cax=fig.add_axes([x, p0.y0, 0.018, p0.height])); cb.set_label(r'$\log_{10}S^{xx}(\mathbf{q},\omega)$', fontsize=8)
+    nm = Normalize(vmin, vmax); keys = (('low.', (0, 0.85, 1)), ('rais.', (1, 0.45, 0)), ('flop', (1, 1, 1)))
+    for i, (lab_, col_) in enumerate(keys):
+        cm_ = LinearSegmentedColormap.from_list('k', [(0, 0, 0), col_])
+        c = fig.colorbar(ScalarMappable(nm, cm_), cax=fig.add_axes([x + i * 0.034, p1.y0, 0.014, p1.height]))
+        c.ax.tick_params(labelsize=6, length=2)
+        if i < 2: c.set_ticklabels([])
+        c.ax.set_xlabel(lab_, fontsize=6, labelpad=2)
+    c.set_label(r'$\log_{10}S^{\perp}(\mathbf{q},\omega)$', fontsize=8)
     fig.savefig(OUT + 'fig7_sqw.pdf')
 
 
@@ -261,7 +333,7 @@ def fig8():
     ax.legend(loc='upper left'); tag(ax, '(a)', x=-0.2)
     ax = axs[1]
     ax.plot(S, ht, 'o-', color=C['green'], label=r'$h_c(M_{\rm dice}/2\to$dice$)$')
-    ax.plot(S, ht / (12 * S) * 10, 's--', color=C['gray'], label=r'$10\,h_c/h_{\rm sat}$, $h_{\rm sat}=12JS$')
+    ax.plot(S, ht / (9 * S) * 10, 's--', color=C['gray'], label=r'$10\,h_c/h_{\rm sat}$, $h_{\rm sat}=9JS$')
     ax.set_xlabel('$S$'); ax.set_ylabel('field ($J$)'); ax.set_ylim(0, 0.45); ax.set_xticks([0.5, 1, 1.5])
     ax.legend(loc='upper right'); tag(ax, '(b)', x=-0.2)
     plt.tight_layout(h_pad=1.0); fig.savefig(OUT + 'fig8_spinS.pdf')

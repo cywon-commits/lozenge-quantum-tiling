@@ -35,6 +35,8 @@ def panel(ax, T, title, n=20, tilt=30, rot=0, rad=0.16, fs=9, half=3.6):
     Q = np.vstack(xy); c = 0.5 * (Q.min(0) + Q.max(0)); ax.set_xlim(c[0] - half, c[0] + half); ax.set_ylim(c[1] - 0.8 * half, c[1] + 0.8 * half)
     ax.set_aspect('equal'); ax.axis('off'); ax.set_title(title, fontsize=fs, pad=2)
 def load(key):
+    S8 = pickle.load(open('paper/structs_v8.pkl', 'rb'))
+    if key in S8: T = Tiling(S8[key]['L']); T.removed = set(S8[key]['removed']); return T
     S = pickle.load(open('paper/structs_L36.pkl', 'rb')); S['pleated'] = pickle.load(open('paper/pleated_L36.pkl', 'rb'))
     T = Tiling(36); T.removed = S[key]; return T
 if __name__ == '__main__':
@@ -49,7 +51,7 @@ def paper_fig(out='paper/figs/fig10_curvature.pdf'):
     from matplotlib.lines import Line2D
     fig, axs = plt.subplots(2, 3, figsize=(7.0, 4.3))
     T_ = [('pleated', r'(a) $h=0$ family: folded, $K=0$'), ('M6', r'(b) $M_{\rm dice}/6$'), ('M3', r'(c) $M_{\rm dice}/3$'),
-          ('M2', r'(d) $M_{\rm dice}/2$: no hubs'), ('M23', r'(e) $2M_{\rm dice}/3$'), ('dice', r'(f) dice')]
+          ('M2', r'(d) $M_{\rm dice}/2$'), ('M35', r'(e) $3M_{\rm dice}/5$: hub-free bound'), ('dice', r'(f) dice')]
     for ax, (k, t) in zip(axs.ravel(), T_): panel(ax, load(k), t, fs=9.5, rad=0.2, half=4.6)
     h = [Line2D([], [], marker='o', ls='', ms=7, mfc=KC[90], mec='k', mew=0.4, label=r'$K=+\pi/2$ ($z=3$)'),
          Line2D([], [], marker='o', ls='', ms=7, mfc=KC[-90], mec='k', mew=0.4, label=r'$K=-\pi/2$ ($z=5$)'),
