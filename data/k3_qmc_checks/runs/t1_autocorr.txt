@@ -1,0 +1,16 @@
+runs/t1/ck_x0p0909_cell_k5_0.07_2.pkl    nmeas= 2973  tau_int(n)=  1.23  tau_int(n_od)=  0.89  block=148 sweeps  block/2tau=  60.2
+runs/t1/ck_x0p0909_cell_k5_0.07_3.pkl    nmeas= 2818  tau_int(n)=  1.15  tau_int(n_od)=  0.98  block=140 sweeps  block/2tau=  61.1
+runs/t1/ck_x0p0909_cell_k5_0.07_4.pkl    nmeas= 2730  tau_int(n)=  1.38  tau_int(n_od)=  0.98  block=136 sweeps  block/2tau=  49.2
+runs/t1/ck_x0p0909_cell_k5_0.07_5.pkl    nmeas= 2977  tau_int(n)=  1.08  tau_int(n_od)=  0.85  block=148 sweeps  block/2tau=  68.5
+runs/t1/ck_x0p1111_cell_k6_0.07_2.pkl    nmeas= 2774  tau_int(n)=  1.29  tau_int(n_od)=  0.79  block=138 sweeps  block/2tau=  53.4
+runs/t1/ck_x0p1111_cell_k6_0.07_3.pkl    nmeas= 2926  tau_int(n)=  1.24  tau_int(n_od)=  0.80  block=146 sweeps  block/2tau=  59.0
+runs/t1/ck_x0p1111_cell_k6_0.07_4.pkl    nmeas= 2815  tau_int(n)=  1.17  tau_int(n_od)=  0.83  block=140 sweeps  block/2tau=  59.6
+runs/t1/ck_x0p1111_cell_k6_0.07_5.pkl    nmeas= 2823  tau_int(n)=  1.42  tau_int(n_od)=  0.81  block=141 sweeps  block/2tau=  49.6
+runs/t1/ck_x0p1429_cell_k5_0.1_2.pkl     nmeas= 2616  tau_int(n)=  1.16  tau_int(n_od)=  0.91  block=130 sweeps  block/2tau=  55.9
+runs/t1/ck_x0p1429_cell_k5_0.1_3.pkl     nmeas= 2656  tau_int(n)=  1.14  tau_int(n_od)=  0.96  block=132 sweeps  block/2tau=  57.9
+runs/t1/ck_x0p25_cell_k6_0.115_2.pkl     nmeas= 2666  tau_int(n)=  1.42  tau_int(n_od)=  1.17  block=133 sweeps  block/2tau=  47.0
+runs/t1/ck_x0p25_cell_k6_0.115_3.pkl     nmeas= 1916  tau_int(n)=  1.44  tau_int(n_od)=  1.06  block=95 sweeps  block/2tau=  33.0
+runs/t1/ck_x0p25_cell_k6_0.115_4.pkl     nmeas= 1904  tau_int(n)=  1.32  tau_int(n_od)=  0.96  block=95 sweeps  block/2tau=  36.1
+runs/t1/ck_x0p25_cell_k6_0.115_5.pkl     nmeas= 2893  tau_int(n)=  1.21  tau_int(n_od)=  1.13  block=144 sweeps  block/2tau=  59.7
+runs/t1/ck_x0p2_cell_k6_0.11_2.pkl       nmeas= 2861  tau_int(n)=  1.23  tau_int(n_od)=  1.22  block=143 sweeps  block/2tau=  57.9
+runs/t1/ck_x0p2_cell_k6_0.11_3.pkl       nmeas= 2976  tau_int(n)=  1.19  tau_int(n_od)=  1.11  block=148 sweeps  block/2tau=  62.2

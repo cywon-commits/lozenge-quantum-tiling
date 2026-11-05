@@ -1,0 +1,5 @@
+ S    (e_dice-e_sq)/S     dev(3/5)/S         dev(M/2)/S         h_c(3/5->dice) [J]
+ 0.5  +0.06255(0.00095)   -0.00918(0.00051)   -0.00877(0.00048)   0.2565(0.0071)
+ 1.0  +0.05646(0.00153)   -0.00808(0.00054)   -0.00850(0.00044)   0.2300(0.0086)
+ 1.5  +0.05392(0.00162)   -0.00833(0.00145)   -0.00895(0.00109)   0.2242(0.0117)
+Selection energies scale as JS if the first two columns are S-independent; h_c should be S-independent in units of J.

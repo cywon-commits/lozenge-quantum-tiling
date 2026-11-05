@@ -1,0 +1,15 @@
+e_sq reference = -0.669437
+square M/Md=0.0000  dev=+0.00(0.01)e-3 J  runs=1  presence=1.00  [v8]
+M347   M/Md=0.0638  dev=-1.46(0.08)e-3 J  runs=4  presence=0.08  [merged]  seed spread 0.14e-3
+M111   M/Md=0.0909  dev=-2.25(0.11)e-3 J  runs=5  presence=0.92  [merged]  seed spread 0.26e-3
+M19    M/Md=0.1111  dev=-2.49(0.10)e-3 J  runs=5  presence=0.43  [merged]  seed spread 0.21e-3
+M17    M/Md=0.1429  dev=-2.79(0.13)e-3 J  runs=3  presence=0.17  [merged]  seed spread 0.13e-3
+M6     M/Md=0.1667  dev=-3.13(0.11)e-3 J  runs=1  presence=0.34  [v8]
+M15    M/Md=0.2000  dev=-3.54(0.10)e-3 J  runs=3  presence=0.75  [merged]  seed spread 0.08e-3
+M14    M/Md=0.2500  dev=-3.84(0.09)e-3 J  runs=5  presence=0.25  [merged]  seed spread 0.12e-3
+M3     M/Md=0.3333  dev=-4.53(0.09)e-3 J  runs=1  presence=1.00  [v8]
+M2     M/Md=0.5000  dev=-4.98(0.09)e-3 J  runs=1  presence=0.48  [v8]
+M35    M/Md=0.6000  dev=-5.25(0.11)e-3 J  runs=3  presence=1.00  [merged]  seed spread 0.03e-3
+M23    M/Md=0.6667  dev=-4.37(0.12)e-3 J  runs=1  presence=0.48  [v8]
+dice   M/Md=1.0000  dev=+0.00(0.30)e-3 J  runs=1  presence=1.00  [v8]
+steps: [(0.045, 'square', 'M111'), (0.119, 'M111', 'M15'), (0.145, 'M15', 'M3'), (0.173, 'M3', 'M35'), (0.268, 'M35', 'dice')]
