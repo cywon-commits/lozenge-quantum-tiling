@@ -28,7 +28,9 @@ for f in files:
     for r in R: byD.setdefault(round(r['m'], 8), []).append(r)
     for k, L in byD.items():
         L.sort(key=lambda r: r['e_model']); e0 = L[0]['e_model']
-        cands += [r for r in L if r['e_model'] <= e0 + TOL][:PER]
+        sel = [r for r in L if r['e_model'] <= e0 + TOL][:PER]
+        for r in sel: r['_src'] = os.path.basename(f)
+        cands += sel
 print(f"{len(cands)} candidates from {len(files)} files", flush=True)
 for i, r in enumerate(cands):
     key = f"{r['cell']}|{r['key']}|{round(r['m'],8)}"
@@ -41,7 +43,7 @@ json.dump(cache, open('bloch_cache.json', 'w'))
 
 ref = json.load(open(REF)) if REF else []
 pts = [dict(m=r['m'], e=r['e_inf'], cell=r['cell'], hist=r['hist'], src='ref36') for r in ref]
-pts += [dict(m=r['m'], e=r['e_inf'], cell=r['cell'], hist=r['hist'], src=os.path.basename(f), key=r['key'])
+pts += [dict(m=r['m'], e=r['e_inf'], cell=r['cell'], hist=r['hist'], src=r['_src'], key=r['key'])
         for r in cands]
 best = {}
 for p in pts:                      # a new candidate replaces the reference only if lower by > 2e-6 J (k-grid noise)

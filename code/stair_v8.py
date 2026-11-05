@@ -14,8 +14,8 @@ for f in glob.glob('qdec_cells/c_*.log'):
         if l.startswith('{'):
             r = json.loads(l)
             if 'sdl' in r['key']: continue
-            runs.setdefault(r['key'], {})[r['seed']] = r
-name = {'x0p1111_cell_k6': 'M19', 'x0p0909_cell_k5': 'M111', 'm35_cell_k8': 'M35', 'x0p1429_cell_k5': 'M17', 'x0p2_cell_k6': 'M15', 'x0p25_cell_k6': 'M14'}
+            runs.setdefault(r['key'], {})[(r['seed'], r['h'])] = r
+name = {'new_3o47_k5': 'M347', 'x0p1111_cell_k6': 'M19', 'x0p0909_cell_k5': 'M111', 'm35_cell_k8': 'M35', 'x0p1429_cell_k5': 'M17', 'x0p2_cell_k6': 'M15', 'x0p25_cell_k6': 'M14'}
 for key, rs in runs.items():
     v = list(rs.values()); m = v[0]['m_lieb']; e0 = np.array([r['E'][0] - r['Ezee'][0] for r in v])
     er = max(np.std(e0) / np.sqrt(len(v)), max(r['E'][1] for r in v) / np.sqrt(len(v)))

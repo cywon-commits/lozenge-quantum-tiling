@@ -1,6 +1,8 @@
 # Changes in this update (manuscript v9, 2026-11-04)
 
 ## v9 (text revision on top of v8)
+- Enumeration completed for all 403 cell shapes (the last 22 cells with 47-48 sites; data/k1_finish/). LSWT hull: vertex 1/15 replaced by 3/47 (47-site cell, 2e-6 J, k-point noise level). QMC of 3/47 (4 runs, data/qdec_cells/c_new_3o47_*): -1.46(9)e-3 J, above the square-1/11 chord, bootstrap presence 0.03; QMC staircase unchanged. Dilute-limit estimate updated to h_c = 0.043 +- 0.006 J. rank_bloch.py: source label of candidates fixed.
+- Review follow-up: own SDL QMC (-0.6649(4) J, 768 sites) and the imbalance-cost discrepancy vs LSWT (factor ~2.7) stated; limitations on autocorrelation, single cluster size and QMC of top LSWT candidates only; +6 references (Jagannathan star clusters, Holstein-Primakoff, Nielsen-Chadha, Rademaker 2020, Vekua 2007, Karlova-Strecka 2026; 40 total); Fig. 6 r^-3.5 line labelled a guide to the eye; wavevector symbol kappa in Fig. 8, cluster copies n x n.
 - Dilute limit (Sec. V D, new Eq. hc): onset field h_c as the isolated-pair limit, independent of the dilute crystals that finite cells cannot host (1/13, 1/17, ...); LSWT saturation of [e0(m)-e_sq]/m below M/11 confines them to ~1e-3 J above h_c; QMC estimate h_c = 0.036 +- 0.007 J. Discussion and Limitations updated accordingly.
 - Former Secs. VIII (finite temperature) and IX (geometric interpretation) moved to Appendices D and A; appendix figures placed in their appendices (figure order = citation order).
 - Introduction: annealed-graph setting stated; Jagannathan/Wessel line of work (Penrose phason result, SDL flips, their "order by disorder" usage) placed in context; Lieb-Mattis theorem.

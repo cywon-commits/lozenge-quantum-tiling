@@ -296,7 +296,7 @@ def fig7():
             rgb = np.clip(np.dstack([p, 0.45 * p + 0.85 * m, m]), 0, 1)       # orange = dS^z=+1, cyan = dS^z=-1
         ax.imshow(rgb, origin='lower', aspect='auto', extent=ext, interpolation='nearest')
         ax.text(0.03, 0.95, r'$h=%.2fJ$' % h, transform=ax.transAxes, color='w', fontsize=8, va='top')
-        ax.set_xlabel(r'$s$  ($\mathbf{q}=s\,\mathbf{b}_1$)')
+        ax.set_xlabel(r'$\kappa$  ($\mathbf{q}=\kappa\,\mathbf{b}_1$)')
         if j == 0: [a_.set_ylabel(r'$\omega/J$') for a_ in axs[:, 0]]
     axs[1, 2].text(0.5, 0.20, r'lowering, $\Delta S^z{=}{-}1$: $\omega+h$', transform=axs[1, 2].transAxes, color=(0, 0.85, 1), fontsize=6.8, va='center', ha='center')
     axs[1, 2].text(0.5, 0.09, r'raising, $\Delta S^z{=}{+}1$: $\omega-h$', transform=axs[1, 2].transAxes, color=(1, 0.45, 0), fontsize=6.8, va='center', ha='center')
