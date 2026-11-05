@@ -1,0 +1,9 @@
+square-type reference (S=1/2, h=0); thermodynamic limit -0.669437(5) J [Sandvik 1997]:
+  square_L24   beta= 36.0  e0=-0.669669 +- 0.000142  (runs=2)  e0 - e_inf = -0.232e-3 J
+  square_L24   beta= 48.0  e0=-0.669497 +- 0.000153  (runs=2)  e0 - e_inf = -0.060e-3 J
+  square_L36   beta= 36.0  e0=-0.669408 +- 0.000109  (runs=2)  e0 - e_inf = +0.029e-3 J
+  square_L36   beta= 48.0  e0=-0.669398 +- 0.000087  (runs=2)  e0 - e_inf = +0.039e-3 J
+3/5 crystal (8x8 cell copies, h=0.2 J), e0 = E - E_Zeeman:
+  beta= 24.0  e0=-0.655924  spread=0.000000  runs=1
+  beta= 36.0  e0=-0.655741  spread=0.000024  runs=3
+  beta= 48.0  e0=-0.655906  spread=0.000000  runs=1

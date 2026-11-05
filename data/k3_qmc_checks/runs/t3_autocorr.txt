@@ -1,0 +1,1 @@
+runs/t3/ck_m35_cell_k8_0.2_12.pkl        nmeas= 2919  tau_int(n)=  1.32  tau_int(n_od)=  1.48  block=145 sweeps  block/2tau=  49.1
